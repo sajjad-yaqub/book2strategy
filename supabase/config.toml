@@ -1,0 +1,4 @@
+project_id = "gehkxfdyioteilbxzvya"
+
+[functions.extract-snepoa]
+verify_jwt = false
