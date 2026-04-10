@@ -2,16 +2,21 @@ import { useState, useCallback } from 'react';
 import type { StrategyCard, AppPhase } from '@/types/strategy';
 import { supabase } from '@/integrations/supabase/client';
 
+interface SwipeHistoryEntry {
+  card: StrategyCard;
+  direction: 'left' | 'right';
+}
+
 export function useStrategyEngine() {
   const [phase, setPhase] = useState<AppPhase>('upload');
   const [cards, setCards] = useState<StrategyCard[]>([]);
   const [savedCards, setSavedCards] = useState<StrategyCard[]>([]);
   const [archivedCards, setArchivedCards] = useState<StrategyCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [swipeHistory, setSwipeHistory] = useState<SwipeHistoryEntry[]>([]);
 
   const processUpload = useCallback(async (file: File) => {
     setPhase('analyzing');
-
     try {
       const reader = new FileReader();
       const base64 = await new Promise<string>((resolve, reject) => {
@@ -28,13 +33,11 @@ export function useStrategyEngine() {
       });
 
       if (error) throw error;
-
       setCards(data.cards || []);
       setCurrentIndex(0);
       setPhase('swiping');
     } catch (err) {
       console.error('Extraction failed:', err);
-      // Fallback to mock data
       setCards(getMockCards());
       setCurrentIndex(0);
       setPhase('swiping');
@@ -44,6 +47,8 @@ export function useStrategyEngine() {
   const swipeCard = useCallback((direction: 'left' | 'right') => {
     const card = cards[currentIndex];
     if (!card) return;
+
+    setSwipeHistory(prev => [...prev, { card, direction }]);
 
     if (direction === 'right') {
       setSavedCards(prev => [...prev, card]);
@@ -58,19 +63,39 @@ export function useStrategyEngine() {
     }
   }, [cards, currentIndex]);
 
+  const undoLastSwipe = useCallback(() => {
+    if (swipeHistory.length === 0) return;
+
+    const lastEntry = swipeHistory[swipeHistory.length - 1];
+    setSwipeHistory(prev => prev.slice(0, -1));
+
+    if (lastEntry.direction === 'right') {
+      setSavedCards(prev => prev.filter(c => c.id !== lastEntry.card.id));
+    } else {
+      setArchivedCards(prev => prev.filter(c => c.id !== lastEntry.card.id));
+    }
+
+    if (phase === 'complete') {
+      setPhase('swiping');
+    }
+    setCurrentIndex(prev => prev - 1);
+  }, [swipeHistory, phase]);
+
   const reset = useCallback(() => {
     setPhase('upload');
     setCards([]);
     setSavedCards([]);
     setArchivedCards([]);
     setCurrentIndex(0);
+    setSwipeHistory([]);
   }, []);
 
   return {
     phase, cards, savedCards, archivedCards, currentIndex,
-    processUpload, swipeCard, reset,
+    processUpload, swipeCard, undoLastSwipe, reset,
     totalCards: cards.length,
     remainingCards: cards.length - currentIndex,
+    canUndo: swipeHistory.length > 0,
   };
 }
 

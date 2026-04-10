@@ -1,5 +1,5 @@
 import { useCallback, useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Upload, FileText, Sparkles } from 'lucide-react';
 
 interface PDFUploadZoneProps {
@@ -38,7 +38,7 @@ export function PDFUploadZone({ onUpload }: PDFUploadZoneProps) {
         >
           <Sparkles className="w-3.5 h-3.5 text-primary" />
           <span className="text-xs font-medium text-muted-foreground tracking-wide uppercase">
-            SNEPOA Extraction Engine
+            Strategy Extraction Engine
           </span>
         </motion.div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground mb-3">

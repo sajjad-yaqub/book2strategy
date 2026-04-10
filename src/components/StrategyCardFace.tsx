@@ -7,11 +7,11 @@ interface StrategyCardFaceProps {
   card: StrategyCard;
 }
 
-const snepoaFields = [
-  { key: 'stimuli' as const, label: 'Stimuli', icon: Target, desc: 'The artifact' },
-  { key: 'novelty' as const, label: 'Novelty', icon: Zap, desc: 'The hook' },
-  { key: 'evolutionary_filters' as const, label: 'Evo Filters', icon: Shield, desc: 'Safety / Status' },
-  { key: 'pre_existing_substrate' as const, label: 'Substrate', icon: Brain, desc: 'Mental model' },
+const insightFields = [
+  { key: 'stimuli' as const, label: 'Trigger', icon: Target, desc: 'The artifact' },
+  { key: 'novelty' as const, label: 'Hook', icon: Zap, desc: 'The hook' },
+  { key: 'evolutionary_filters' as const, label: 'Deep Driver', icon: Shield, desc: 'Safety / Status' },
+  { key: 'pre_existing_substrate' as const, label: 'Mental Model', icon: Brain, desc: 'Mental model' },
   { key: 'outcome' as const, label: 'Outcome', icon: TrendingUp, desc: 'Psych / Biz result' },
   { key: 'action' as const, label: 'Action', icon: Rocket, desc: 'High-leverage move' },
 ];
@@ -35,9 +35,9 @@ export function StrategyCardFace({ card }: StrategyCardFaceProps) {
         </p>
       </div>
 
-      {/* SNEPOA Grid */}
+      {/* Insight Grid */}
       <div className="grid grid-cols-2 gap-2 mb-4">
-        {snepoaFields.map((field, i) => (
+        {insightFields.map((field, i) => (
           <motion.div
             key={field.key}
             initial={{ opacity: 0, y: 8 }}
