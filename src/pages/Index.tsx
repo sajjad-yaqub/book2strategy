@@ -54,6 +54,10 @@ const Index = () => {
           )}
         </AnimatePresence>
       </main>
+
+      <footer className="py-4 text-center text-sm text-muted-foreground border-t border-border/30">
+        Created with 🧠 and 🤍 by Sajjad Ansari
+      </footer>
     </div>
   );
 };
