@@ -4,7 +4,7 @@ import { Brain, Zap, LineChart, Scan } from 'lucide-react';
 const steps = [
   { icon: Scan, label: 'Scanning document structure', delay: 0 },
   { icon: Brain, label: 'Extracting behavioral insights', delay: 1.2 },
-  { icon: Zap, label: 'Mapping SNEPOA dimensions', delay: 2.4 },
+  { icon: Zap, label: 'Mapping psychological dimensions', delay: 2.4 },
   { icon: LineChart, label: 'Calculating P&L leverage', delay: 3.6 },
 ];
 
@@ -16,7 +16,6 @@ export function AnalyzingAnimation() {
       exit={{ opacity: 0 }}
       className="w-full max-w-lg mx-auto flex flex-col items-center gap-8"
     >
-      {/* Pulsing orb */}
       <div className="relative w-32 h-32">
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
@@ -31,7 +30,6 @@ export function AnalyzingAnimation() {
         <div className="absolute inset-8 rounded-full bg-primary/50 flex items-center justify-center">
           <Brain className="w-8 h-8 text-primary-foreground" />
         </div>
-        {/* Scan line */}
         <motion.div
           className="absolute inset-x-0 h-0.5 bg-primary/60 rounded-full scan-line"
           style={{ top: '25%' }}
@@ -48,7 +46,7 @@ export function AnalyzingAnimation() {
       </div>
 
       <div className="w-full space-y-3">
-        {steps.map((step, i) => (
+        {steps.map((step) => (
           <motion.div
             key={step.label}
             initial={{ opacity: 0, x: -20 }}

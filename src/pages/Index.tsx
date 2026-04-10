@@ -11,11 +11,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Top bar */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border/30">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-primary" />
-          <span className="font-semibold text-foreground tracking-tight">SNEPOA Engine</span>
+          <span className="font-semibold text-foreground tracking-tight">Strategy Engine</span>
         </div>
         <div className="flex items-center gap-4">
           {engine.phase === 'swiping' && (
@@ -26,7 +25,6 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Main content */}
       <main className="flex-1 flex items-center justify-center p-6">
         <AnimatePresence mode="wait">
           {engine.phase === 'upload' && (
@@ -41,6 +39,8 @@ const Index = () => {
               cards={engine.cards}
               currentIndex={engine.currentIndex}
               onSwipe={engine.swipeCard}
+              onUndo={engine.undoLastSwipe}
+              canUndo={engine.canUndo}
               totalCards={engine.totalCards}
             />
           )}

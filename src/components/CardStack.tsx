@@ -2,17 +2,18 @@ import { useState, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from 'framer-motion';
 import type { StrategyCard as StrategyCardType } from '@/types/strategy';
 import { StrategyCardFace } from './StrategyCardFace';
-import { Archive, BookmarkPlus, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Archive, BookmarkPlus, ArrowLeft, ArrowRight, Undo2 } from 'lucide-react';
 
 interface CardStackProps {
   cards: StrategyCardType[];
   currentIndex: number;
   onSwipe: (direction: 'left' | 'right') => void;
+  onUndo: () => void;
+  canUndo: boolean;
   totalCards: number;
 }
 
-export function CardStack({ cards, currentIndex, onSwipe, totalCards }: CardStackProps) {
-  const [exitDirection, setExitDirection] = useState<'left' | 'right' | null>(null);
+export function CardStack({ cards, currentIndex, onSwipe, onUndo, canUndo, totalCards }: CardStackProps) {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-300, 300], [-18, 18]);
   const archiveOpacity = useTransform(x, [-150, -50, 0], [1, 0.5, 0]);
@@ -21,17 +22,10 @@ export function CardStack({ cards, currentIndex, onSwipe, totalCards }: CardStac
   const handleDragEnd = useCallback((_: any, info: PanInfo) => {
     const threshold = 100;
     if (info.offset.x > threshold) {
-      setExitDirection('right');
       onSwipe('right');
     } else if (info.offset.x < -threshold) {
-      setExitDirection('left');
       onSwipe('left');
     }
-  }, [onSwipe]);
-
-  const handleButtonSwipe = useCallback((dir: 'left' | 'right') => {
-    setExitDirection(dir);
-    onSwipe(dir);
   }, [onSwipe]);
 
   const currentCard = cards[currentIndex];
@@ -79,7 +73,7 @@ export function CardStack({ cards, currentIndex, onSwipe, totalCards }: CardStac
           )}
 
           {/* Active card */}
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="wait">
             {currentCard && (
               <motion.div
                 key={currentCard.id}
@@ -90,12 +84,7 @@ export function CardStack({ cards, currentIndex, onSwipe, totalCards }: CardStac
                 onDragEnd={handleDragEnd}
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{
-                  x: exitDirection === 'left' ? -400 : 400,
-                  opacity: 0,
-                  rotate: exitDirection === 'left' ? -20 : 20,
-                  transition: { duration: 0.3 },
-                }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                 transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 className="w-full max-w-xl cursor-grab active:cursor-grabbing relative z-20"
               >
@@ -109,17 +98,27 @@ export function CardStack({ cards, currentIndex, onSwipe, totalCards }: CardStac
       {/* Action buttons */}
       <div className="flex items-center gap-6">
         <button
-          onClick={() => handleButtonSwipe('left')}
+          onClick={() => onSwipe('left')}
           className="w-14 h-14 rounded-full bg-secondary/80 border border-border/50 flex items-center justify-center transition-all hover:bg-destructive/20 hover:border-destructive/40 group"
         >
           <ArrowLeft className="w-5 h-5 text-muted-foreground group-hover:text-destructive transition-colors" />
         </button>
+
+        <button
+          onClick={onUndo}
+          disabled={!canUndo}
+          className="w-10 h-10 rounded-full bg-secondary/60 border border-border/40 flex items-center justify-center transition-all hover:bg-accent/20 hover:border-accent/40 group disabled:opacity-30 disabled:cursor-not-allowed"
+          title="Undo last swipe"
+        >
+          <Undo2 className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
+        </button>
+
         <div className="text-xs text-muted-foreground text-center">
           <p>← Archive</p>
           <p className="mt-0.5">Save →</p>
         </div>
         <button
-          onClick={() => handleButtonSwipe('right')}
+          onClick={() => onSwipe('right')}
           className="w-14 h-14 rounded-full bg-secondary/80 border border-border/50 flex items-center justify-center transition-all hover:bg-primary/20 hover:border-primary/40 group"
         >
           <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
