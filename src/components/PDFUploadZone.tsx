@@ -38,14 +38,14 @@ export function PDFUploadZone({ onUpload }: PDFUploadZoneProps) {
         >
           <Sparkles className="w-3.5 h-3.5 text-primary" />
           <span className="text-xs font-medium text-muted-foreground tracking-wide uppercase">
-            Strategy Extraction Engine
+            STRATEGY EXTRACTION ENGINE
           </span>
         </motion.div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground mb-3">
-          Book → Strategy Cards
+          Book → Strategy
         </h1>
         <p className="text-muted-foreground text-lg max-w-md mx-auto">
-          Upload any business book PDF. Get swipeable, actionable strategy cards powered by behavioral psychology.
+          Upload any PDF. Get swipeable, actionable strategy Powered by behavioral psychology.
         </p>
       </div>
 
@@ -71,7 +71,7 @@ export function PDFUploadZone({ onUpload }: PDFUploadZoneProps) {
             {isDragging ? 'Drop your PDF here' : 'Drag & drop a PDF, or click to browse'}
           </p>
           <p className="text-sm text-muted-foreground">
-            Business books, strategy docs, research papers
+            Books, strategy docs, research papers
           </p>
         </div>
         <input
