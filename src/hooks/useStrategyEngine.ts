@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import type { StrategyCard, AppPhase } from '@/types/strategy';
 import { supabase } from '@/integrations/supabase/client';
 
