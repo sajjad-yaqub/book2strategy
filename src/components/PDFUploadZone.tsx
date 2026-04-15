@@ -42,7 +42,7 @@ export function PDFUploadZone({ onUpload }: PDFUploadZoneProps) {
           </span>
         </motion.div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground mb-3">
-          Book → Strategy
+          PDF → Strategy
         </h1>
         <p className="text-muted-foreground text-lg max-w-md mx-auto">
           Upload any PDF. Get swipeable, actionable strategy Powered by behavioral psychology.
